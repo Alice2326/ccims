@@ -1,0 +1,13 @@
+###
+POST http://localhost:8080/teachers
+Content-Type: application/json
+
+{
+  "name": "赵振中",
+  "gender": "MAN"
+}
+###
+GET http://localhost:8080/teachers/1
+
+###
+GET http://localhost:8082/teachers

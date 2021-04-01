@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.zhangxiang.ccims.mapper.CourseAssignMapper">
+<!--    <resultMap type="com.zhangxiang.ccims.entity.Student" id="StudentResultMap">-->
+<!--        <id property="s_id" column="s_id" />-->
+<!--        <result property="name" column="name" />-->
+<!--        <result property="gender" column="gender" />-->
+<!--        <result property="class_id" column="class_id" />-->
+<!--        <association property="a_class" column="teacher_id" javaType="com.zhangxiang.ccims.entity.AClass">-->
+<!--            <id property="class_id" column="aclass_id" />-->
+<!--            <result property="name" column="aclass_name" />-->
+<!--        </association>-->
+<!--    </resultMap>-->
+<!--    <sql id="student_sql">-->
+<!--        s.s_id,s.name,s.gender,s.class_id,c.class_id as aclass_id,c.name as aclass_name-->
+<!--    </sql>-->
+<!--    <select id="findStudentBySID" resultMap="StudentResultMap" parameterType="integer">-->
+<!--        select <include refid="student_sql"/> from student s,class c  where c.class_id = s.class_id and s.s_id=#{s_id}-->
+<!--    </select>-->
+
+        <sql id="student_sql">
+            ca.ca_id,ca.class_id,ca.course_id,ca.ca_time,ca.t_id,c.course_id,c.course_name as course_name
+        </sql>
+
+        <resultMap type="com.zhangxiang.ccims.entity.CourseAssign" id="CourseAssignResultMap">
+            <id property="ca_id" column="ca_id" />
+            <result property="class_id" column="class_id" />
+            <result property="course_id" column="class_id" />
+            <result property="ca_time" column="ca_time" />
+            <result property="t_id" column="t_id" />
+            <result property="week" column="week" />
+            <result property="comment" column="comment" />
+            <association property="course" column="course_id" javaType="com.zhangxiang.ccims.entity.Course">
+                <id property="course_id" column="course_id" />
+                <result property="course_name" column="course_name" />
+            </association>
+            <association property="aclass" column="class_id" javaType="com.zhangxiang.ccims.entity.AClass">
+                <id property="class_id" column="class_id" />
+                <result property="name" column="name" />
+            </association>
+        </resultMap>
+    <select id="selectAllByClass_id" resultType="com.zhangxiang.ccims.entity.CourseAssign" resultMap="CourseAssignResultMap">
+
+        select * from course c,course_assign ca,class cl where c.course_id = ca.course_id and cl.class_id = ca.class_id
+        <if test="class_id != null">
+            and ca.class_id=#{class_id}
+        </if>
+        <if test="week != null">
+            and ca.week = #{week}
+        </if>
+    </select>
+    <select id="selectAllByT_id" resultType="com.zhangxiang.ccims.entity.CourseAssign" resultMap="CourseAssignResultMap">
+        select * from course c,course_assign ca where c.course_id = ca.course_id and ca.t_id=#{t_id}
+        <if test="week != null">
+            and ca.week = #{week}
+        </if>
+    </select>
+
+</mapper>

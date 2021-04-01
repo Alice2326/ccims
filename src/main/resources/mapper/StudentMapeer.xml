@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.zhangxiang.ccims.mapper.StudentMapper">
+    <resultMap type="com.zhangxiang.ccims.entity.Student" id="StudentResultMap">
+        <id property="s_id" column="s_id" />
+        <result property="name" column="name" />
+        <result property="gender" column="gender" />
+        <result property="class_id" column="class_id" />
+        <association property="a_class" column="teacher_id" javaType="com.zhangxiang.ccims.entity.AClass">
+            <id property="class_id" column="aclass_id" />
+            <result property="name" column="aclass_name" />
+        </association>
+    </resultMap>
+    <sql id="student_sql">
+        s.s_id,s.name,s.gender,s.class_id,c.class_id as aclass_id,c.name as aclass_name
+    </sql>
+    <select id="findStudentBySID" resultMap="StudentResultMap" parameterType="integer">
+        select <include refid="student_sql"/> from student s,class c  where c.class_id = s.class_id and s.s_id=#{s_id}
+    </select>
+</mapper>

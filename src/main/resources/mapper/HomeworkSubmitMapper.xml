@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.zhangxiang.ccims.mapper.HomeworkSubmitMapper">
+
+    <resultMap id="HomeworkSubmitMap" type="com.zhangxiang.ccims.entity.HomeworkSubmit">
+        <id property="hs_id" column="hs_id"></id>
+        <result property="comment" column="comment"></result>
+        <result property="feedback" column="feedback"></result>
+        <result property="submit_time" column="submit_time"></result>
+        <result property="h_id" column="h_id"></result>
+        <result property="file_paths" column="file_paths"></result>
+        <result property="s_id" column="s_id"></result>
+        <association property="student" column="s_id" javaType="com.zhangxiang.ccims.entity.Student">
+            <id property="s_id" column="s_id"></id>
+            <result property="name" column="name"></result>
+            <result property="gender" column="gender"></result>
+            <result property="class_id" column="class_id"></result>
+        </association>
+    </resultMap>
+
+    <select id="findOneByH_id"  resultMap="HomeworkSubmitMap">
+        select * from homework_submit hs,student s where hs.s_id = s.s_id and hs.h_id = #{h_id}
+    </select>
+    <select id="selectAllByS_idAndH_idA" resultType="com.zhangxiang.ccims.entity.HomeworkSubmit">
+        select * from homework_submit where s_id = #{s_id} and h_id = #{h_id}
+    </select>
+</mapper>
