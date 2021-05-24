@@ -61,14 +61,14 @@ public class HomeworkController {
                    // file.transferTo(new File("E:\\nihao\\" + originalFilename)); //这里的路径电脑上必须有
                     Path path = Paths.get(fileUtil.getHomework_path(), String.valueOf(homework.getH_id()),
                             localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                            localDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")),file.getOriginalFilename());
+                            localDateTime.format(DateTimeFormatter.ofPattern("HH-mm-ss")),file.getOriginalFilename());
                     if(!Files.exists(path.getParent())){
                         Path path1 = Files.createDirectories(path.getParent());
                         System.out.println(path1.getFileSystem());
                         System.out.println(path1);
                     }
                     file.transferTo(path);
-                    stringJoiner.add(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+path.toString());
+                    stringJoiner.add(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss"))+path.toString());
 
                 }
             }
@@ -242,7 +242,7 @@ public class HomeworkController {
         String[] n = new String[strings.length];
         Arrays.sort(strings, (a,b) -> {
             try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
                 if (format.parse(a.substring(0,19)).after(format.parse(b.substring(0,19))))
                     return -1;
             } catch (ParseException e) {

@@ -43,8 +43,8 @@ mybatis-plus:
 
 my_config:
   material:
-    path: /Users/hxying/Desktop/ccims/material
+    path: C:\Users\hxying\Desktop\ccims\material
 
   homework:
-    path: /Users/hxying/Desktop/ccims/homework
+    path: C:\Users\hxying\Desktop\ccims\material\homework
 

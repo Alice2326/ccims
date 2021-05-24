@@ -107,7 +107,7 @@ public class CourseAssignController {
         for (int i = 0; i < multipartFiles.length; i++) {
             Path path = Paths.get(fileUtil.getMaterial_path(), String.valueOf(ca_id),
                     localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                    localDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")),multipartFiles[i].getOriginalFilename());
+                    localDateTime.format(DateTimeFormatter.ofPattern("HH-mm-ss")),multipartFiles[i].getOriginalFilename());
             if(!Files.exists(path.getParent())){
                 Path path1 = Files.createDirectories(path.getParent());
                 System.out.println(path1.getFileSystem());
@@ -115,7 +115,7 @@ public class CourseAssignController {
             }
 
             multipartFiles[i].transferTo(path);
-            stringJoiner.add(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))+path.toFile().getAbsolutePath());
+            stringJoiner.add(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss"))+path.toFile().getAbsolutePath());
         }
 
         CourseAssign courseAssign = CourseAssignMapper.selectById(ca_id);
@@ -238,7 +238,7 @@ public class CourseAssignController {
         String[] n = new String[strings.length];
         Arrays.sort(strings, (a,b) -> {
             try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
                 if (format.parse(a.substring(0,19)).after(format.parse(b.substring(0,19))))
                     return -1;
             } catch (ParseException e) {

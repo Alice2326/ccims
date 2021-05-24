@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -87,6 +90,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .password(encodePassword).roles("TEACHER");
 //    }
 
+    private CorsConfigurationSource CorsConfigurationSource() {
+        CorsConfigurationSource source =   new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:9528"); //设置允许跨域访问服务端的客户端地址
+        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);//设置允许的请求方式
+        corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);//设置访问哪些请求头
+        corsConfiguration.setAllowCredentials(true);//允许携带cookie跨域
+        ((UrlBasedCorsConfigurationSource) source).registerCorsConfiguration("/**",corsConfiguration); //配置允许跨域访问的url
+        return source;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -112,7 +126,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutUrl("/logout").addLogoutHandler(myLogoutHandler)
                 .and().exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint)
                 .accessDeniedHandler(myAccessDeniedHandler)
-                .and().csrf().disable();
+                .and().csrf().disable().cors().configurationSource(CorsConfigurationSource());
 
 
     }

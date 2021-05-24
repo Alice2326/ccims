@@ -26,9 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,10 +43,13 @@ public class HomeworkSubmiController {
     @PostMapping("")
     public Result add(HomeworkSubmit homeworkSubmit, @RequestParam(value = "files",required = false) MultipartFile[] files) throws IOException {
 
+        homeworkSubmit.setSubmit_time(new Date());
+        homeworkSubmit.setS_id(1);
         int i = HomeworkSubmitMapper.insert(homeworkSubmit);
         System.out.println(homeworkSubmit.getHs_id());
         if (files != null) {
             LocalDateTime localDateTime = LocalDateTime.now();
+            StringJoiner stringJoiner = new StringJoiner(";");
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
                     String originalFilename = file.getOriginalFilename();
@@ -59,17 +60,21 @@ public class HomeworkSubmiController {
                             "submit",
                             String.valueOf(homeworkSubmit.getHs_id()),
                             localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                            localDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")),file.getOriginalFilename());
+                            localDateTime.format(DateTimeFormatter.ofPattern("HH-mm-ss")),file.getOriginalFilename());
                     if(!Files.exists(path.getParent())){
                         Path path1 = Files.createDirectories(path.getParent());
                         System.out.println(path1.getFileSystem());
                         System.out.println(path1);
                     }
                     file.transferTo(path);
-
+                    stringJoiner.add(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss"))+path.toString());
                 }
             }
+
+            homeworkSubmit.setFile_paths(stringJoiner.toString());
+            HomeworkSubmitMapper.updateById(homeworkSubmit);
         }
+
         return MybatisUtil.getResult(i);
     }
 
